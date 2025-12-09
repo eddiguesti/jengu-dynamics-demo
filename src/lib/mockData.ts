@@ -522,11 +522,11 @@ export const DEMO_ANNUAL_REVENUE = {
   summary: {
     totalAdditionalRevenue2024: '€113,300',
     totalAdditionalRevenue2025: '€144,600',
-    averageGain: '+33%',
-    peakSeasonOptimization: '+42%',
-    lowSeasonRecovery: '+28%',
-    avgPriceOptimization: '+22%',
-    occupancyImprovement: '+8%',
+    averageGain: '33%',
+    peakSeasonOptimization: '42%',
+    lowSeasonRecovery: '28%',
+    avgPriceOptimization: '22%',
+    occupancyImprovement: '8%',
     competitorComparison: '+€1,334/unit vs area average',
   },
 };
