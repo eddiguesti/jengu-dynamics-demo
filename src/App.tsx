@@ -8,6 +8,7 @@ import { ToastContainer } from './components/ui/Toast';
 import { BackgroundJobsBanner } from './components/layout/BackgroundJobsBanner';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { DemoBanner } from './components/DemoBanner';
+import { MobileBlocker } from './components/MobileBlocker';
 
 // Lazy load pages for better performance
 const Dashboard = lazy(() => import('./pages/Dashboard').then((m) => ({ default: m.Dashboard })));
@@ -68,6 +69,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <BrowserRouter>
+            <MobileBlocker />
             <ToastContainer />
             <DemoBanner />
             <BackgroundJobsBanner />
