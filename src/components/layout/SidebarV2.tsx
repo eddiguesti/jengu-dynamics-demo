@@ -420,11 +420,17 @@ export const SidebarV2 = () => {
           <div className="relative">
             <div className="mb-2 flex items-center gap-2">
               <Calendar className="h-5 w-5 text-white" />
-              <span className="font-bold text-white">Book Free Call</span>
+              <span className="font-bold text-white">
+                {language === 'fr' ? 'Réserver un appel gratuit' : 'Book Free Call'}
+              </span>
             </div>
             <div className="flex items-start gap-1.5 text-xs text-white/90">
               <CheckCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
-              <span>You don't pay unless you make more money</span>
+              <span>
+                {language === 'fr'
+                  ? 'Vous ne payez que si vous gagnez plus'
+                  : "You don't pay unless you make more money"}
+              </span>
             </div>
           </div>
         </a>
