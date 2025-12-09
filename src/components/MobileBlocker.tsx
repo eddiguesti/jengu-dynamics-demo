@@ -58,38 +58,45 @@ export const MobileBlocker = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed inset-0 z-[9999] flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+      className="fixed inset-0 z-[9999] overflow-y-auto overflow-x-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+      style={{
+        minHeight: '100dvh',
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
+      }}
     >
-      {/* Language toggle */}
-      <div className="absolute right-4 top-4">
+      {/* Language toggle - fixed position */}
+      <div className="absolute right-4 top-4 z-10" style={{ top: 'max(1rem, env(safe-area-inset-top))' }}>
         <button
           onClick={toggleLanguage}
-          className="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-sm text-white/80 transition-colors hover:bg-white/20"
+          className="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-sm text-white/80 backdrop-blur-sm transition-colors active:bg-white/20"
         >
           <Globe className="h-4 w-4" />
           {language === 'en' ? 'FR' : 'EN'}
         </button>
       </div>
 
-      {/* Content */}
-      <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+      {/* Main content - scrollable container */}
+      <div className="flex min-h-full flex-col items-center justify-center px-5 py-16">
         {/* Logo */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="mb-8"
+          className="mb-6 flex flex-col items-center"
         >
-          <div className="relative mx-auto">
-            <div className="absolute inset-0 rounded-3xl bg-indigo-500/30 blur-2xl" />
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-full bg-indigo-500/20 blur-2xl" />
             <img
               src="/logo.webp"
               alt="Jengu"
-              className="relative h-20 w-20 rounded-3xl shadow-2xl"
+              className="relative h-16 w-16 rounded-2xl shadow-2xl"
             />
           </div>
-          <h1 className="mt-4 text-2xl font-bold text-white">Jengu</h1>
-          <p className="text-sm text-indigo-300">Pricing Intelligence</p>
+          <h1 className="mt-3 text-xl font-bold text-white">Jengu</h1>
+          <p className="text-xs text-indigo-300">Pricing Intelligence</p>
         </motion.div>
 
         {/* Icon */}
@@ -97,9 +104,9 @@ export const MobileBlocker = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur"
+          className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur"
         >
-          <Monitor className="h-10 w-10 text-indigo-400" />
+          <Monitor className="h-8 w-8 text-indigo-400" />
         </motion.div>
 
         {/* Text */}
@@ -107,11 +114,11 @@ export const MobileBlocker = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mb-8"
+          className="mb-6 max-w-[280px] text-center"
         >
-          <h2 className="mb-2 text-2xl font-bold text-white">{t.title}</h2>
-          <p className="mb-4 text-lg text-indigo-200">{t.subtitle}</p>
-          <p className="max-w-sm text-sm leading-relaxed text-slate-400">{t.description}</p>
+          <h2 className="mb-2 text-xl font-bold text-white">{t.title}</h2>
+          <p className="mb-3 text-base text-indigo-200">{t.subtitle}</p>
+          <p className="text-sm leading-relaxed text-slate-400">{t.description}</p>
         </motion.div>
 
         {/* CTAs */}
@@ -119,13 +126,13 @@ export const MobileBlocker = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="flex w-full max-w-xs flex-col gap-3"
+          className="flex w-full max-w-[280px] flex-col gap-3"
         >
           <a
             href="https://www.jengu.ai/book/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all hover:shadow-xl hover:shadow-indigo-500/40"
+            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all active:scale-[0.98]"
           >
             <Calendar className="h-5 w-5" />
             {t.bookCall}
@@ -135,7 +142,7 @@ export const MobileBlocker = () => {
             href="https://www.jengu.ai"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-medium text-white transition-all hover:bg-white/10"
+            className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-all active:bg-white/10"
           >
             {t.visitSite}
           </a>
@@ -146,16 +153,16 @@ export const MobileBlocker = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-8 flex items-center gap-2 text-sm text-emerald-400"
+          className="mt-6 flex items-center gap-2 text-xs text-emerald-400"
         >
-          <CheckCircle className="h-4 w-4" />
-          {t.noRisk}
+          <CheckCircle className="h-4 w-4 flex-shrink-0" />
+          <span>{t.noRisk}</span>
         </motion.div>
-      </div>
 
-      {/* Footer */}
-      <div className="pb-8 text-center">
-        <p className="text-xs text-slate-500">demo.jengu.ai</p>
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-[10px] text-slate-500">demo.jengu.ai</p>
+        </div>
       </div>
     </motion.div>
   )
