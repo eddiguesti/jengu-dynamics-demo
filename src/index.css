@@ -1,0 +1,456 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ============================================
+     THEME DESIGN TOKENS
+     Light & Dark mode CSS variables
+     ============================================ */
+
+  :root,
+  .light {
+    /* Light Theme - Premium Apple-inspired */
+    /* Primary brand color - Refined blue with depth */
+    --color-primary: 10 132 255; /* #0A84FF - iOS Blue */
+    --color-primary-hover: 0 113 227; /* #0071E3 - Apple Blue */
+    --color-primary-light: 235 245 255; /* #EBF5FF */
+    --color-primary-dark: 0 64 221; /* #0040DD */
+
+    /* Base surfaces - Clean, crisp whites */
+    --color-background: 245 245 247; /* #F5F5F7 - Apple gray bg */
+    --color-surface: 255 255 255; /* #FFFFFF - Cards */
+    --color-surface-hover: 250 250 252; /* #FAFAFC - Subtle hover */
+    --color-elevated: 255 255 255; /* #FFFFFF - Modals */
+    --color-elevated-hover: 248 248 250; /* #F8F8FA */
+
+    /* Text hierarchy - Apple-style contrast */
+    --color-text: 29 29 31; /* #1D1D1F - Apple black */
+    --color-text-secondary: 99 99 102; /* #636366 - Secondary */
+    --color-text-tertiary: 142 142 147; /* #8E8E93 - Tertiary */
+    --color-text-muted: 174 174 178; /* #AEAEB2 - Disabled */
+
+    /* Borders & dividers - Barely there */
+    --color-border: 229 229 234; /* #E5E5EA */
+    --color-border-hover: 199 199 204; /* #C7C7CC */
+    --color-divider: 242 242 247; /* #F2F2F7 */
+
+    /* Semantic colors - iOS palette */
+    --color-success: 52 199 89; /* #34C759 - iOS Green */
+    --color-success-light: 235 255 240; /* #EBFFF0 */
+    --color-warning: 255 149 0; /* #FF9500 - iOS Orange */
+    --color-warning-light: 255 248 235; /* #FFF8EB */
+    --color-error: 255 59 48; /* #FF3B30 - iOS Red */
+    --color-error-light: 255 238 236; /* #FFEEEC */
+    --color-info: 90 200 250; /* #5AC8FA - iOS Cyan */
+    --color-info-light: 235 250 255; /* #EBFAFF */
+
+    /* Premium shadows - Multi-layered depth */
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+
+    /* Premium glow effects */
+    --glow-primary: 0 0 20px rgba(10, 132, 255, 0.3);
+    --glow-success: 0 0 20px rgba(52, 199, 89, 0.3);
+  }
+
+  .dark {
+    /* Dark Theme - Premium Apple-inspired dark mode */
+    /* Primary brand color - Vivid iOS blue for dark */
+    --color-primary: 10 132 255; /* #0A84FF - iOS Blue */
+    --color-primary-hover: 64 156 255; /* #409CFF - Lighter on hover */
+    --color-primary-light: 20 40 70; /* Dark blue bg for badges */
+    --color-primary-dark: 100 180 255; /* #64B4FF - Bright accent */
+
+    /* Base surfaces - Rich blacks with subtle elevation */
+    --color-background: 0 0 0; /* #000000 - True black */
+    --color-surface: 28 28 30; /* #1C1C1E - iOS dark card */
+    --color-surface-hover: 44 44 46; /* #2C2C2E - Hover */
+    --color-elevated: 44 44 46; /* #2C2C2E - Modals */
+    --color-elevated-hover: 58 58 60; /* #3A3A3C */
+
+    /* Text hierarchy - Balanced contrast */
+    --color-text: 255 255 255; /* #FFFFFF - Primary */
+    --color-text-secondary: 174 174 178; /* #AEAEB2 - Secondary */
+    --color-text-tertiary: 142 142 147; /* #8E8E93 - Tertiary */
+    --color-text-muted: 99 99 102; /* #636366 - Disabled */
+
+    /* Borders & dividers - Subtle separation */
+    --color-border: 56 56 58; /* #38383A */
+    --color-border-hover: 72 72 74; /* #48484A */
+    --color-divider: 36 36 38; /* #242426 */
+
+    /* Semantic colors - iOS dark variants */
+    --color-success: 48 209 88; /* #30D158 - iOS Green dark */
+    --color-success-light: 20 60 35; /* Dark green bg */
+    --color-warning: 255 159 10; /* #FF9F0A - iOS Orange dark */
+    --color-warning-light: 60 45 20; /* Dark orange bg */
+    --color-error: 255 69 58; /* #FF453A - iOS Red dark */
+    --color-error-light: 60 25 25; /* Dark red bg */
+    --color-info: 100 210 255; /* #64D2FF - iOS Cyan dark */
+    --color-info-light: 20 50 70; /* Dark cyan bg */
+
+    /* Premium shadows - Subtle glow in dark */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.05);
+    --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.1);
+    --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.1);
+
+    /* Premium glow effects */
+    --glow-primary: 0 0 30px rgba(10, 132, 255, 0.4);
+    --glow-success: 0 0 30px rgba(48, 209, 88, 0.4);
+  }
+
+  /* ============================================
+     BASE STYLES
+     ============================================ */
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-text antialiased;
+    background-color: rgb(var(--color-background)) !important;
+    color: rgb(var(--color-text)) !important;
+    transition:
+      background-color 300ms cubic-bezier(0.45, 0, 0.15, 1),
+      color 300ms cubic-bezier(0.45, 0, 0.15, 1);
+  }
+
+  /* Typography - Premium hierarchy */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
+    color: rgb(var(--color-text));
+  }
+
+  h1 {
+    @apply text-4xl;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    @apply text-3xl;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  /* Focus states - Accessible & beautiful */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+    transition: box-shadow 200ms cubic-bezier(0.45, 0, 0.15, 1);
+  }
+
+  /* Selection - Theme-aware */
+  ::selection {
+    background-color: rgb(var(--color-primary-light));
+    color: rgb(var(--color-primary-dark));
+  }
+
+  .dark ::selection {
+    background-color: rgba(var(--color-primary), 0.3);
+    color: rgb(var(--color-text));
+  }
+
+  /* Respect user's motion preferences for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* ============================================
+     PREMIUM ANIMATIONS
+     Apple-inspired smooth transitions
+     ============================================ */
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .animate-blur-in {
+    animation: blurIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Spring animation for interactive elements */
+  .transition-spring {
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Smooth Apple-style transition */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Premium hover lift with shadow */
+  .hover-lift {
+    @apply transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Interactive scale effect */
+  .press-scale {
+    @apply transition-transform duration-150;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .press-scale:active {
+    transform: scale(0.97);
+  }
+
+  /* Keyframes */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes blurIn {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: var(--glow-primary);
+    }
+    to {
+      box-shadow: 0 0 40px rgba(10, 132, 255, 0.5);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom Range Slider Styling - Theme-aware */
+  input[type='range'].slider-thumb {
+    @apply appearance-none;
+  }
+
+  input[type='range'].slider-thumb::-webkit-slider-thumb {
+    @apply h-5 w-5 cursor-pointer appearance-none rounded-full transition-all duration-200;
+    background: rgb(var(--color-primary));
+    box-shadow: 0 2px 8px rgba(var(--color-primary), 0.4);
+  }
+
+  input[type='range'].slider-thumb::-webkit-slider-thumb:hover {
+    @apply scale-110;
+    box-shadow: 0 4px 12px rgba(var(--color-primary), 0.6);
+  }
+
+  input[type='range'].slider-thumb::-moz-range-thumb {
+    @apply h-5 w-5 cursor-pointer rounded-full border-0 transition-all duration-200;
+    background: rgb(var(--color-primary));
+    box-shadow: 0 2px 8px rgba(var(--color-primary), 0.4);
+  }
+
+  input[type='range'].slider-thumb::-moz-range-thumb:hover {
+    @apply scale-110;
+    box-shadow: 0 4px 12px rgba(var(--color-primary), 0.6);
+  }
+
+  input[type='range'].slider-thumb::-webkit-slider-runnable-track {
+    @apply h-2 rounded-lg;
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-primary)) 0%,
+      rgb(var(--color-primary)) var(--range-progress, 0%),
+      rgb(var(--color-border)) var(--range-progress, 0%),
+      rgb(var(--color-border)) 100%
+    );
+  }
+
+  input[type='range'].slider-thumb::-moz-range-track {
+    @apply h-2 rounded-lg;
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-primary)) 0%,
+      rgb(var(--color-primary)) var(--range-progress, 0%),
+      rgb(var(--color-border)) var(--range-progress, 0%),
+      rgb(var(--color-border)) 100%
+    );
+  }
+
+  /* ============================================
+     COMPONENT UTILITIES - Premium interactions
+     ============================================ */
+
+  /* Card hover lift effect */
+  .card-hover {
+    @apply ease-smooth transition-all duration-fast;
+    @apply hover:translate-y-[-2px] hover:shadow-card-hover;
+  }
+
+  /* Button bounce effect */
+  .button-bounce:active {
+    @apply animate-bounce-soft;
+  }
+
+  /* Smooth border transitions */
+  .border-smooth {
+    @apply ease-smooth transition-colors duration-fast;
+  }
+
+  /* Focus ring - consistent across components */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Glassmorphism effect for modals/overlays */
+  .glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-light {
+    background-color: rgba(var(--color-surface), 0.8);
+  }
+
+  .dark .glass-dark {
+    background-color: rgba(var(--color-surface), 0.6);
+  }
+
+  /* Smooth scrolling with custom scrollbar */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-border)) transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-border));
+    border-radius: 100px;
+    transition: background 200ms;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--color-border-hover));
+  }
+
+  /* Text gradient - premium effect */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, rgb(var(--color-primary)), rgb(var(--color-info)));
+  }
+
+  /* Shimmer loading effect */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(
+      90deg,
+      rgb(var(--color-surface)) 0%,
+      rgb(var(--color-surface-hover)) 50%,
+      rgb(var(--color-surface)) 100%
+    );
+    background-size: 1000px 100%;
+  }
+}

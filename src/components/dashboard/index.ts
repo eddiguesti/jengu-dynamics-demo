@@ -1,0 +1,11 @@
+// Dashboard Components - Barrel Export
+export * from './types'
+export { MetricsBar, calculateMetrics } from './MetricsBar'
+export type { MetricsData } from './MetricsBar'
+export { QuickActionCards } from './QuickActionCards'
+export { KPICards } from './KPICards'
+export { RevenueChart, OccupancyChart, PriceTrendChart } from './DashboardCharts'
+export { EmptyState, WelcomeBanner } from './EmptyState'
+export { QuickActionsFooter } from './QuickActionsFooter'
+export { CalendarSection } from './CalendarSection'
+export { RevenueComparisonHero, RevenueComparisonChart } from './RevenueComparison'

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6366F1" />
+    <meta
+      name="description"
+      content="Jengu Demo - Interactive demo of AI-Powered Dynamic Pricing for Camp Azur Etoiles, a fictional campsite in Bandol, France"
+    />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="Jengu Demo - Camp Azur Etoiles" />
+    <meta
+      property="og:description"
+      content="Experience dynamic pricing intelligence for hospitality. Explore our interactive demo featuring a fictional Mediterranean campsite."
+    />
+    <meta property="og:type" content="website" />
+
+    <title>Jengu Demo - Camp Azur Etoiles | Dynamic Pricing</title>
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Inter font - Apple's go-to web font (similar to SF Pro) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font smoothing for premium feel -->
+    <style>
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Custom selection color - purple theme for demo */
+      ::selection {
+        background-color: rgba(99, 102, 241, 0.2);
+        color: inherit;
+      }
+
+      /* Demo loading screen */
+      .demo-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        z-index: 9999;
+        transition: opacity 0.3s ease-out;
+      }
+
+      .demo-loader.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .demo-loader-spinner {
+        width: 64px;
+        height: 64px;
+        border: 4px solid #e2e8f0;
+        border-top-color: #6366f1;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .demo-loader-text {
+        margin-top: 16px;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      .demo-loader-title {
+        margin-top: 8px;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-background text-text">
+    <!-- Demo loading screen -->
+    <div class="demo-loader" id="demo-loader">
+      <div class="demo-loader-spinner"></div>
+      <p class="demo-loader-title">Camp Azur Etoiles</p>
+      <p class="demo-loader-text">Loading interactive demo...</p>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      // Hide loader when React app mounts
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          var loader = document.getElementById('demo-loader');
+          if (loader) {
+            loader.classList.add('hidden');
+            setTimeout(function () {
+              loader.remove();
+            }, 300);
+          }
+        }, 500);
+      });
+    </script>
+  </body>
+</html>

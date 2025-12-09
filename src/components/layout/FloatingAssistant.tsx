@@ -1,0 +1,247 @@
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { MessageCircle, X, Send, Sparkles, Crown } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { showPremiumModal } from '@/components/ui/PremiumModal'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+import { t } from '@/lib/translations'
+import clsx from 'clsx'
+
+export const FloatingAssistant = () => {
+  const { language } = useLanguageStore()
+
+  const QUICK_ANSWERS: Record<string, { en: string; fr: string }> = {
+    upload: {
+      en: 'Go to Data page and drag-and-drop your CSV/Excel file. Make sure it has date, price, and occupancy columns.',
+      fr: 'Allez sur la page Données et glissez-déposez votre fichier CSV/Excel. Assurez-vous qu\'il contient les colonnes date, prix et occupation.',
+    },
+    enrich: {
+      en: 'Navigate to Enrichment page and click "Enrich All" to add weather, holidays, and temporal features.',
+      fr: 'Allez sur la page Enrichissement et cliquez sur "Tout enrichir" pour ajouter météo, vacances et données temporelles.',
+    },
+    insights: {
+      en: 'Check the Insights page for 6 interactive charts showing weather impact, occupancy patterns, and competitor dynamics.',
+      fr: 'Consultez la page Insights pour 6 graphiques interactifs montrant l\'impact météo, les tendances d\'occupation et la dynamique concurrentielle.',
+    },
+    model: {
+      en: 'Visit Model page, select XGBoost algorithm, choose 4-6 features, and click "Train Model".',
+      fr: 'Allez sur la page Modèle, sélectionnez l\'algorithme XGBoost, choisissez 4-6 caractéristiques et cliquez sur "Entraîner le modèle".',
+    },
+    optimize: {
+      en: 'Go to Optimize page and click "Generate Recommendations" to get AI-powered pricing suggestions.',
+      fr: 'Allez sur la page Optimiser et cliquez sur "Générer les recommandations" pour obtenir des suggestions de prix par IA.',
+    },
+    settings: {
+      en: 'Update your business profile in Settings page - location is used for weather data.',
+      fr: 'Mettez à jour votre profil professionnel sur la page Paramètres - la localisation est utilisée pour les données météo.',
+    },
+  }
+
+  const SUGGESTED_QUESTIONS = [
+    { text: t('assistant.howUpload', language), key: 'upload', action: '/data' },
+    { text: t('assistant.howEnrich', language), key: 'enrich', action: '/enrichment' },
+    { text: t('assistant.viewInsights', language), key: 'insights', action: '/insights' },
+    { text: t('assistant.trainModel', language), key: 'model', action: '/model' },
+    { text: t('assistant.getPricing', language), key: 'optimize', action: '/optimize' },
+    { text: t('assistant.updateSettings', language), key: 'settings', action: '/settings' },
+  ]
+  const [isOpen, setIsOpen] = useState(false)
+  const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>(
+    []
+  )
+  const [input, setInput] = useState('')
+  const navigate = useNavigate()
+
+  const handleSend = () => {
+    if (!input.trim()) return
+
+    const userMessage = input.toLowerCase()
+    setMessages(prev => [...prev, { role: 'user', content: input }])
+
+    // Find best answer - first check quick answers
+    const demoResponse = language === 'fr'
+      ? 'Ceci est une version démo avec des capacités IA limitées. Passez à Premium pour obtenir des recommandations de prix personnalisées par IA basées sur vos données !\n\nEn attendant, cliquez sur l\'une des suggestions d\'aide rapide ci-dessous.'
+      : 'This is a demo version with limited AI capabilities. Upgrade to Premium to get personalized AI-powered pricing recommendations based on your specific data!\n\nFor now, try clicking one of the quick help suggestions below.'
+    let response = demoResponse
+    let foundMatch = false
+
+    const upgradeHint = language === 'fr'
+      ? '\n\n💡 Passez à Premium pour des recommandations IA personnalisées !'
+      : '\n\n💡 Upgrade to Premium for personalized AI recommendations!'
+
+    for (const [key, answers] of Object.entries(QUICK_ANSWERS)) {
+      if (userMessage.includes(key)) {
+        response = answers[language] + upgradeHint
+        foundMatch = true
+        break
+      }
+    }
+
+    // If no quick answer found, show premium upsell after response
+    if (!foundMatch) {
+      setTimeout(() => {
+        setMessages(prev => [...prev, { role: 'assistant', content: response }])
+        // Show premium modal after a delay
+        setTimeout(() => {
+          showPremiumModal('Full AI-powered pricing assistant')
+        }, 2000)
+      }, 500)
+    } else {
+      setTimeout(() => {
+        setMessages(prev => [...prev, { role: 'assistant', content: response }])
+      }, 500)
+    }
+
+    setInput('')
+  }
+
+  const handleQuestionClick = (key: string, action: string) => {
+    setMessages([
+      { role: 'user', content: SUGGESTED_QUESTIONS.find(q => q.key === key)?.text || '' },
+      { role: 'assistant', content: QUICK_ANSWERS[key][language] },
+    ])
+
+    // Navigate after a short delay
+    setTimeout(() => {
+      navigate(action)
+      setIsOpen(false)
+    }, 1500)
+  }
+
+  const openFullAssistant = () => {
+    // In demo mode, show premium modal
+    showPremiumModal('Full AI Assistant with GPT-5')
+    setIsOpen(false)
+  }
+
+  return (
+    <>
+      {/* Floating Button */}
+      <motion.button
+        onClick={() => setIsOpen(!isOpen)}
+        className={clsx(
+          'fixed bottom-6 right-6 z-50',
+          'h-14 w-14 rounded-full',
+          'bg-primary text-background',
+          'shadow-elevated hover:shadow-lg',
+          'flex items-center justify-center',
+          'transition-all duration-200 hover:scale-110'
+        )}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+      </motion.button>
+
+      {/* Chat Bubble */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ duration: 0.2 }}
+            className="border-border bg-card shadow-elevated fixed bottom-24 right-6 z-50 w-96 overflow-hidden rounded-2xl border"
+          >
+            {/* Header */}
+            <div className="border-border bg-elevated border-b p-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
+                  <Sparkles className="text-primary h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-text text-sm font-semibold">{t('assistant.title', language)}</h3>
+                  <p className="text-muted text-xs">{t('assistant.subtitle', language)}</p>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="hover:bg-card rounded p-1 transition-colors"
+                >
+                  <X className="text-muted h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div className="bg-background h-80 space-y-3 overflow-y-auto p-4">
+              {messages.length === 0 ? (
+                <div className="py-8 text-center">
+                  <div className="bg-primary/10 mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full">
+                    <Sparkles className="text-primary h-8 w-8" />
+                  </div>
+                  <p className="text-text mb-1 text-sm font-medium">{t('assistant.greeting', language)}</p>
+                  <p className="text-muted text-xs">{t('assistant.suggestion', language)}</p>
+                </div>
+              ) : (
+                messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={clsx(
+                      'flex gap-2',
+                      msg.role === 'user' ? 'justify-end' : 'justify-start'
+                    )}
+                  >
+                    <div
+                      className={clsx(
+                        'max-w-[85%] rounded-lg px-3 py-2 text-sm',
+                        msg.role === 'user' ? 'bg-primary text-background' : 'bg-elevated text-text'
+                      )}
+                    >
+                      {msg.content}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Suggested Questions */}
+            {messages.length === 0 && (
+              <div className="border-border bg-card space-y-2 border-t p-4">
+                <p className="text-muted mb-2 text-xs font-medium">{t('assistant.quickHelp', language)}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {SUGGESTED_QUESTIONS.map(q => (
+                    <button
+                      key={q.key}
+                      onClick={() => handleQuestionClick(q.key, q.action)}
+                      className="border-border bg-elevated text-text hover:bg-elevated/80 rounded border px-2 py-1.5 text-left text-xs transition-colors"
+                    >
+                      {q.text}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Input */}
+            <div className="border-border bg-card border-t p-3">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && handleSend()}
+                  placeholder={t('assistant.placeholder', language)}
+                  className="border-border bg-elevated text-text placeholder-muted focus:border-primary focus:ring-primary/50 flex-1 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={!input.trim()}
+                  className="bg-primary text-background hover:bg-primary/90 rounded-lg p-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Send className="h-4 w-4" />
+                </button>
+              </div>
+              <button
+                onClick={openFullAssistant}
+                className="text-primary hover:text-primary/80 mt-2 w-full flex items-center justify-center gap-1 text-xs transition-colors"
+              >
+                <Crown className="h-3 w-3" />
+                {t('assistant.openFull', language)}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
