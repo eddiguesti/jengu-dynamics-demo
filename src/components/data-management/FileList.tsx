@@ -2,6 +2,28 @@ import React from 'react'
 import { FileText, CheckCircle2, AlertCircle, X, Clock, Sparkles } from 'lucide-react'
 import { Card, Badge } from '../ui'
 import { UploadedFile, formatFileSize } from './types'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    uploadedFiles: 'Uploaded Files',
+    files: 'file(s)',
+    rows: 'rows',
+    columns: 'columns',
+    enriched: 'Enriched',
+    enriching: 'Enriching...',
+    failed: 'Failed',
+  },
+  fr: {
+    uploadedFiles: 'Fichiers Importés',
+    files: 'fichier(s)',
+    rows: 'lignes',
+    columns: 'colonnes',
+    enriched: 'Enrichi',
+    enriching: 'Enrichissement...',
+    failed: 'Échoué',
+  },
+}
 
 interface FileListProps {
   files: UploadedFile[]
@@ -25,14 +47,17 @@ const getStatusIcon = (status: UploadedFile['status']) => {
 }
 
 export const FileList: React.FC<FileListProps> = ({ files, uploadedFilesFromDB, onRemoveFile }) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   if (files.length === 0) return null
 
   return (
     <Card variant="default">
       <Card.Header>
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-text">Uploaded Files</h2>
-          <Badge variant="info">{files.length} file(s)</Badge>
+          <h2 className="text-xl font-semibold text-text">{t.uploadedFiles}</h2>
+          <Badge variant="info">{files.length} {t.files}</Badge>
         </div>
       </Card.Header>
       <Card.Body>
@@ -52,8 +77,8 @@ export const FileList: React.FC<FileListProps> = ({ files, uploadedFilesFromDB, 
                   <p className="truncate text-sm font-medium text-text">{file.name}</p>
                   <p className="mt-1 text-xs text-muted">
                     {formatFileSize(file.size)}
-                    {file.rows && ` • ${file.rows.toLocaleString()} rows`}
-                    {file.columns && ` • ${file.columns} columns`}
+                    {file.rows && ` • ${file.rows.toLocaleString()} ${t.rows}`}
+                    {file.columns && ` • ${file.columns} ${t.columns}`}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -71,19 +96,19 @@ export const FileList: React.FC<FileListProps> = ({ files, uploadedFilesFromDB, 
                   {enrichmentStatus === 'completed' && (
                     <Badge variant="success" className="flex items-center gap-1">
                       <Sparkles className="h-3 w-3" />
-                      Enriched
+                      {t.enriched}
                     </Badge>
                   )}
                   {enrichmentStatus === 'pending' && (
                     <Badge variant="primary" className="flex items-center gap-1">
                       <Clock className="h-3 w-3 animate-pulse" />
-                      Enriching...
+                      {t.enriching}
                     </Badge>
                   )}
                   {enrichmentStatus === 'failed' && (
                     <Badge variant="error" className="flex items-center gap-1">
                       <AlertCircle className="h-3 w-3" />
-                      Failed
+                      {t.failed}
                     </Badge>
                   )}
                 </div>

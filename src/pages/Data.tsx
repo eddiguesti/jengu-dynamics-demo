@@ -392,8 +392,8 @@ export const Data = () => {
     >
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold text-text">Data Management</h1>
-        <p className="mt-2 text-muted">Upload and enrich your historical booking data</p>
+        <h1 className="text-4xl font-bold text-text">Gestion des Données</h1>
+        <p className="mt-2 text-muted">Importez et enrichissez vos données de réservation historiques</p>
 
         <StepIndicator
           currentStep={currentStep}

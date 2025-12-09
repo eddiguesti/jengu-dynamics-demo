@@ -5,6 +5,20 @@ import { Button } from '../ui/Button'
 import { Calendar } from 'lucide-react'
 import { PriceDemandCalendar } from '../pricing/PriceDemandCalendar'
 import type { DayData } from '../pricing/PriceDemandCalendar'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    title: 'Price & Demand Calendar',
+    description: 'Interactive calendar showing pricing and demand patterns from your data',
+    fullView: 'Full View',
+  },
+  fr: {
+    title: 'Calendrier Prix & Demande',
+    description: 'Calendrier interactif affichant les prix et la demande de vos données',
+    fullView: 'Vue Complète',
+  },
+}
 
 interface CalendarSectionProps {
   calendarData: DayData[]
@@ -12,6 +26,8 @@ interface CalendarSectionProps {
 
 export const CalendarSection = ({ calendarData }: CalendarSectionProps) => {
   const navigate = useNavigate()
+  const { language } = useLanguageStore()
+  const t = translations[language]
 
   if (!calendarData || calendarData.length === 0) return null
 
@@ -29,14 +45,14 @@ export const CalendarSection = ({ calendarData }: CalendarSectionProps) => {
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-text">Price & Demand Calendar</h2>
+                <h2 className="text-xl font-semibold text-text">{t.title}</h2>
                 <p className="mt-1 text-sm text-muted">
-                  Interactive calendar showing pricing and demand patterns from your data
+                  {t.description}
                 </p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={() => navigate('/pricing/calendar')}>
-              Full View →
+              {t.fullView} →
             </Button>
           </div>
         </Card.Header>

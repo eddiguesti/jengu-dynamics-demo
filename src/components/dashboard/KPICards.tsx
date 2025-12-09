@@ -3,6 +3,7 @@ import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
 import { AnimatedNumber } from '../ui/AnimatedNumber'
 import { spring, staggerDelay } from '@/lib/motion'
+import { useLanguageStore } from '@/stores/useLanguageStore'
 import {
   BarChart3,
   DollarSign,
@@ -12,6 +13,39 @@ import {
   ArrowDownRight,
 } from 'lucide-react'
 
+const translations = {
+  en: {
+    totalRecords: 'Total Records',
+    fromUploaded: 'From uploaded data',
+    avgPrice: 'Average Price',
+    acrossRecords: 'Across all records',
+    occupancyRate: 'Occupancy Rate',
+    avgDataset: 'Average across dataset',
+    high: 'High',
+    moderate: 'Moderate',
+    low: 'Low',
+    mlPredictions: 'ML Predictions',
+    ready: 'Ready',
+    available: 'Available',
+    viewInsights: 'View in Insights',
+  },
+  fr: {
+    totalRecords: 'Total Enregistrements',
+    fromUploaded: 'Depuis les données importées',
+    avgPrice: 'Prix Moyen',
+    acrossRecords: 'Sur tous les enregistrements',
+    occupancyRate: "Taux d'Occupation",
+    avgDataset: 'Moyenne du jeu de données',
+    high: 'Élevé',
+    moderate: 'Modéré',
+    low: 'Faible',
+    mlPredictions: 'Prédictions IA',
+    ready: 'Prêt',
+    available: 'Disponible',
+    viewInsights: 'Voir les insights',
+  },
+}
+
 interface KPICardsProps {
   totalRecords: number
   avgPrice: number
@@ -19,6 +53,9 @@ interface KPICardsProps {
 }
 
 export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
       {/* Total Records Card */}
@@ -39,7 +76,7 @@ export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps
                 <BarChart3 className="h-6 w-6 text-primary" />
               </div>
             </div>
-            <p className="mb-1 text-sm text-muted">Total Records</p>
+            <p className="mb-1 text-sm text-muted">{t.totalRecords}</p>
             <h3 className="text-3xl font-bold text-text">
               <AnimatedNumber
                 value={totalRecords}
@@ -47,7 +84,7 @@ export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps
               />
             </h3>
             <div className="mt-3 flex items-center gap-1 text-xs text-muted">
-              <span>From uploaded data</span>
+              <span>{t.fromUploaded}</span>
             </div>
           </div>
         </Card>
@@ -71,7 +108,7 @@ export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps
                 <DollarSign className="h-6 w-6 text-success" />
               </div>
             </div>
-            <p className="mb-1 text-sm text-muted">Average Price</p>
+            <p className="mb-1 text-sm text-muted">{t.avgPrice}</p>
             <h3 className="text-3xl font-bold text-text">
               <AnimatedNumber
                 value={avgPrice}
@@ -80,7 +117,7 @@ export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps
               />
             </h3>
             <div className="mt-3 flex items-center gap-1 text-xs text-muted">
-              <span>Across all records</span>
+              <span>{t.acrossRecords}</span>
             </div>
           </div>
         </Card>
@@ -106,25 +143,25 @@ export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps
               {avgOccupancy > 75 ? (
                 <Badge variant="success" size="sm">
                   <ArrowUpRight className="mr-1 h-3 w-3" />
-                  High
+                  {t.high}
                 </Badge>
               ) : avgOccupancy > 50 ? (
                 <Badge variant="default" size="sm">
-                  Moderate
+                  {t.moderate}
                 </Badge>
               ) : (
                 <Badge variant="default" size="sm">
                   <ArrowDownRight className="mr-1 h-3 w-3" />
-                  Low
+                  {t.low}
                 </Badge>
               )}
             </div>
-            <p className="mb-1 text-sm text-muted">Occupancy Rate</p>
+            <p className="mb-1 text-sm text-muted">{t.occupancyRate}</p>
             <h3 className="text-3xl font-bold text-text">
               <AnimatedNumber value={avgOccupancy} suffix="%" />
             </h3>
             <div className="mt-3 flex items-center gap-1 text-xs text-muted">
-              <span>Average across dataset</span>
+              <span>{t.avgDataset}</span>
             </div>
           </div>
         </Card>
@@ -148,13 +185,13 @@ export const KPICards = ({ totalRecords, avgPrice, avgOccupancy }: KPICardsProps
                 <Zap className="h-6 w-6 text-primary" />
               </div>
               <Badge variant="primary" size="sm">
-                Ready
+                {t.ready}
               </Badge>
             </div>
-            <p className="mb-1 text-sm text-muted">ML Predictions</p>
-            <h3 className="text-2xl font-bold text-primary">Available</h3>
+            <p className="mb-1 text-sm text-muted">{t.mlPredictions}</p>
+            <h3 className="text-2xl font-bold text-primary">{t.available}</h3>
             <div className="mt-3 flex items-center gap-1 text-xs text-muted">
-              <span>View in Insights</span>
+              <span>{t.viewInsights}</span>
             </div>
           </div>
         </Card>

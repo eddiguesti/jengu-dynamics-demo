@@ -3,12 +3,48 @@ import { Link2, CheckCircle2, Zap, RefreshCw, Shield, ArrowRight } from 'lucide-
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { showPremiumModal } from '../ui/PremiumModal'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    connectPMS: 'Connect Your PMS',
+    automaticSync: 'Automatic sync - no uploads needed',
+    recommended: 'Recommended',
+    realtimeSync: 'Real-time sync',
+    autoUpdates: 'Auto-updates',
+    secureConnection: 'Secure connection',
+    popular: 'Popular',
+    viewAllIntegrations: 'View all 20+ integrations',
+    whyConnect: 'Why connect?',
+    whyConnectDesc: 'Your booking data syncs automatically every hour. No manual exports, no missed updates, always accurate pricing recommendations.',
+    eseasonDesc: 'Leading PMS for French campsites',
+    mewsDesc: 'Modern hospitality cloud',
+    cloudbedsDesc: 'All-in-one hotel management',
+    hipcampDesc: 'Outdoor stays marketplace',
+  },
+  fr: {
+    connectPMS: 'Connectez Votre PMS',
+    automaticSync: 'Synchronisation automatique - pas d\'import nécessaire',
+    recommended: 'Recommandé',
+    realtimeSync: 'Sync temps réel',
+    autoUpdates: 'Mises à jour auto',
+    secureConnection: 'Connexion sécurisée',
+    popular: 'Populaire',
+    viewAllIntegrations: 'Voir les 20+ intégrations',
+    whyConnect: 'Pourquoi connecter ?',
+    whyConnectDesc: 'Vos données de réservation se synchronisent automatiquement chaque heure. Pas d\'export manuel, pas de mises à jour manquées, toujours des recommandations tarifaires précises.',
+    eseasonDesc: 'PMS leader pour les campings français',
+    mewsDesc: 'Cloud hôtelier moderne',
+    cloudbedsDesc: 'Gestion hôtelière tout-en-un',
+    hipcampDesc: 'Marketplace séjours plein air',
+  },
+}
 
 interface PMSProvider {
   id: string
   name: string
   logo: string
-  description: string
+  descKey: 'eseasonDesc' | 'mewsDesc' | 'cloudbedsDesc' | 'hipcampDesc'
   popular?: boolean
 }
 
@@ -17,36 +53,39 @@ const PMS_PROVIDERS: PMSProvider[] = [
     id: 'eseason',
     name: 'eSeason / Inaxel',
     logo: '🏕️',
-    description: 'Leading PMS for French campsites',
+    descKey: 'eseasonDesc',
     popular: true,
   },
   {
     id: 'mews',
     name: 'MEWS',
     logo: '🏨',
-    description: 'Modern hospitality cloud',
+    descKey: 'mewsDesc',
   },
   {
     id: 'cloudbeds',
     name: 'Cloudbeds',
     logo: '☁️',
-    description: 'All-in-one hotel management',
+    descKey: 'cloudbedsDesc',
   },
   {
     id: 'hipcamp',
     name: 'HipCamp',
     logo: '⛺',
-    description: 'Outdoor stays marketplace',
+    descKey: 'hipcampDesc',
   },
 ]
 
-const FEATURES = [
-  { icon: Zap, text: 'Real-time sync' },
-  { icon: RefreshCw, text: 'Auto-updates' },
-  { icon: Shield, text: 'Secure connection' },
-]
-
 export const PMSIntegration = () => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
+  const FEATURES = [
+    { icon: Zap, text: t.realtimeSync },
+    { icon: RefreshCw, text: t.autoUpdates },
+    { icon: Shield, text: t.secureConnection },
+  ]
+
   const handleConnect = (provider: PMSProvider) => {
     showPremiumModal(`${provider.name} Integration`)
   }
@@ -64,12 +103,12 @@ export const PMSIntegration = () => {
               <Link2 className="h-6 w-6 text-success" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-text">Connect Your PMS</h3>
-              <p className="text-sm text-muted">Automatic sync - no uploads needed</p>
+              <h3 className="text-lg font-semibold text-text">{t.connectPMS}</h3>
+              <p className="text-sm text-muted">{t.automaticSync}</p>
             </div>
           </div>
           <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
-            Recommended
+            {t.recommended}
           </span>
         </div>
 
@@ -95,13 +134,13 @@ export const PMSIntegration = () => {
             >
               {provider.popular && (
                 <span className="absolute -right-1 -top-1 rounded-full bg-success px-2 py-0.5 text-[10px] font-bold text-background">
-                  Popular
+                  {t.popular}
                 </span>
               )}
               <span className="text-2xl">{provider.logo}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-text truncate">{provider.name}</p>
-                <p className="text-xs text-muted truncate">{provider.description}</p>
+                <p className="text-xs text-muted truncate">{t[provider.descKey]}</p>
               </div>
               <ArrowRight className="h-4 w-4 text-muted opacity-0 transition-opacity group-hover:opacity-100" />
             </motion.button>
@@ -116,7 +155,7 @@ export const PMSIntegration = () => {
             onClick={() => showPremiumModal('All PMS Integrations')}
             className="text-muted hover:text-text"
           >
-            View all 20+ integrations
+            {t.viewAllIntegrations}
             <ArrowRight className="ml-1 h-3 w-3" />
           </Button>
         </div>
@@ -126,8 +165,7 @@ export const PMSIntegration = () => {
           <div className="flex items-start gap-2">
             <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-success" />
             <p className="text-xs text-muted">
-              <span className="font-medium text-success">Why connect?</span> Your booking data syncs automatically every hour.
-              No manual exports, no missed updates, always accurate pricing recommendations.
+              <span className="font-medium text-success">{t.whyConnect}</span> {t.whyConnectDesc}
             </p>
           </div>
         </div>

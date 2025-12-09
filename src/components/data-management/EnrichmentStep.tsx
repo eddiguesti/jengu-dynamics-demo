@@ -14,6 +14,46 @@ import { Card, Button, Badge, Progress } from '../ui'
 import { EnrichmentProgress } from '../features/EnrichmentProgress'
 import { EnrichmentFeature } from './types'
 import clsx from 'clsx'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    locationRequired: 'Business Location Required',
+    locationDesc: 'Weather and Holiday enrichment require your business location to be configured. Please set your city, country, latitude, and longitude in Settings to enable these features.',
+    locationWarning: 'Without location data, Weather Data and Holidays & Events enrichment will fail',
+    goToSettings: 'Go to Settings',
+    enrichmentProgress: 'Enrichment Progress',
+    featuresCompleted: '{completed} of {total} features completed',
+    allComplete: 'All Complete',
+    enrichAll: 'Enrich All',
+    complete: 'Complete',
+    running: 'Running',
+    error: 'Error',
+    ready: 'Ready',
+    run: 'Run',
+    enrichmentComplete: 'Enrichment Complete!',
+    dataReady: 'Your data is ready for pricing optimization and insights analysis',
+    startOptimizing: 'Start Optimizing Prices',
+  },
+  fr: {
+    locationRequired: 'Localisation Requise',
+    locationDesc: 'L\'enrichissement météo et jours fériés nécessite la configuration de votre localisation. Veuillez définir votre ville, pays, latitude et longitude dans les Paramètres.',
+    locationWarning: 'Sans données de localisation, l\'enrichissement Météo et Jours Fériés échouera',
+    goToSettings: 'Aller aux Paramètres',
+    enrichmentProgress: 'Progression de l\'Enrichissement',
+    featuresCompleted: '{completed} sur {total} fonctionnalités terminées',
+    allComplete: 'Tout Terminé',
+    enrichAll: 'Tout Enrichir',
+    complete: 'Terminé',
+    running: 'En cours',
+    error: 'Erreur',
+    ready: 'Prêt',
+    run: 'Lancer',
+    enrichmentComplete: 'Enrichissement Terminé !',
+    dataReady: 'Vos données sont prêtes pour l\'optimisation tarifaire et l\'analyse',
+    startOptimizing: 'Commencer l\'Optimisation',
+  },
+}
 
 interface EnrichmentStepProps {
   features: EnrichmentFeature[]
@@ -35,6 +75,8 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
   onEnrichmentError,
 }) => {
   const navigate = useNavigate()
+  const { language } = useLanguageStore()
+  const t = translations[language]
 
   const completedCount = features.filter(f => f.status === 'complete').length
   const allComplete = features.every(f => f.status === 'complete')
@@ -43,13 +85,13 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
   const getStatusBadge = (status: EnrichmentFeature['status']) => {
     switch (status) {
       case 'complete':
-        return <Badge variant="success">Complete</Badge>
+        return <Badge variant="success">{t.complete}</Badge>
       case 'running':
-        return <Badge variant="primary">Running</Badge>
+        return <Badge variant="primary">{t.running}</Badge>
       case 'error':
-        return <Badge variant="error">Error</Badge>
+        return <Badge variant="error">{t.error}</Badge>
       default:
-        return <Badge variant="default">Ready</Badge>
+        return <Badge variant="default">{t.ready}</Badge>
     }
   }
 
@@ -75,16 +117,14 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
                 <MapPin className="h-6 w-6 text-warning" />
               </div>
               <div className="flex-1">
-                <h3 className="mb-1 text-lg font-semibold text-text">Business Location Required</h3>
+                <h3 className="mb-1 text-lg font-semibold text-text">{t.locationRequired}</h3>
                 <p className="mb-3 text-sm text-muted">
-                  Weather and Holiday enrichment require your business location to be configured.
-                  Please set your city, country, latitude, and longitude in Settings to enable these
-                  features.
+                  {t.locationDesc}
                 </p>
                 <div className="flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-warning" />
                   <span className="text-xs text-muted">
-                    Without location data, Weather Data and Holidays & Events enrichment will fail
+                    {t.locationWarning}
                   </span>
                 </div>
               </div>
@@ -95,7 +135,7 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
                 className="flex-shrink-0"
               >
                 <SettingsIcon className="mr-2 h-4 w-4" />
-                Go to Settings
+                {t.goToSettings}
               </Button>
             </div>
           </Card>
@@ -106,9 +146,9 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
       <Card variant="elevated">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-text">Enrichment Progress</h2>
+            <h2 className="text-xl font-semibold text-text">{t.enrichmentProgress}</h2>
             <p className="mt-1 text-sm text-muted">
-              {completedCount} of {features.length} features completed
+              {t.featuresCompleted.replace('{completed}', String(completedCount)).replace('{total}', String(features.length))}
             </p>
           </div>
           <Button
@@ -121,12 +161,12 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
             {allComplete ? (
               <>
                 <CheckCircle2 className="mr-2 h-5 w-5" />
-                All Complete
+                {t.allComplete}
               </>
             ) : (
               <>
                 <Play className="mr-2 h-5 w-5" />
-                Enrich All
+                {t.enrichAll}
               </>
             )}
           </Button>
@@ -226,7 +266,7 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
                       onClick={() => onStartEnrichment(feature.id)}
                       disabled={anyRunning}
                     >
-                      Run
+                      {t.run}
                     </Button>
                   )}
                 </div>
@@ -249,13 +289,13 @@ export const EnrichmentStep: React.FC<EnrichmentStepProps> = ({
                 <Sparkles className="h-8 w-8 text-success" />
               </div>
               <div className="flex-1">
-                <h3 className="mb-1 text-lg font-semibold text-text">Enrichment Complete!</h3>
+                <h3 className="mb-1 text-lg font-semibold text-text">{t.enrichmentComplete}</h3>
                 <p className="text-sm text-muted">
-                  Your data is ready for pricing optimization and insights analysis
+                  {t.dataReady}
                 </p>
               </div>
               <Button variant="primary" size="lg" onClick={() => navigate('/pricing-engine')}>
-                Start Optimizing Prices
+                {t.startOptimizing}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>

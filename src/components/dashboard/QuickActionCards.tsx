@@ -3,39 +3,75 @@ import { useNavigate } from 'react-router-dom'
 import { Card } from '../ui/Card'
 import { Zap, Database, BarChart3, Activity, ArrowUpRight } from 'lucide-react'
 import { staggerContainer, staggerItem, spring } from '@/lib/motion'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    quickAction: 'Quick Action',
+    getPriceQuote: 'Get Price Quote',
+    aiPoweredPricing: 'AI-powered pricing recommendation',
+    openOptimizer: 'Open Optimizer',
+    uploadData: 'Upload Data',
+    addNewCSV: 'Add new CSV files to analyze',
+    manageFiles: 'Manage Files',
+    viewAnalytics: 'View Analytics',
+    deepDive: 'Deep dive into trends & insights',
+    exploreCharts: 'Explore Charts',
+    askAI: 'Ask AI',
+    instantAnswers: 'Get instant answers & advice',
+    openAssistant: 'Open Assistant',
+  },
+  fr: {
+    quickAction: 'Action Rapide',
+    getPriceQuote: 'Obtenir un Prix',
+    aiPoweredPricing: 'Recommandation tarifaire par IA',
+    openOptimizer: 'Ouvrir l\'Optimiseur',
+    uploadData: 'Importer des Données',
+    addNewCSV: 'Ajouter de nouveaux fichiers CSV',
+    manageFiles: 'Gérer les Fichiers',
+    viewAnalytics: 'Voir les Analyses',
+    deepDive: 'Explorez les tendances en détail',
+    exploreCharts: 'Explorer les Graphiques',
+    askAI: 'Demander à l\'IA',
+    instantAnswers: 'Obtenez des réponses instantanées',
+    openAssistant: 'Ouvrir l\'Assistant',
+  },
+}
 
 export const QuickActionCards = () => {
   const navigate = useNavigate()
+  const { language } = useLanguageStore()
+  const t = translations[language]
 
   const actions = [
     {
-      title: 'Get Price Quote',
-      subtitle: 'AI-powered pricing recommendation',
-      label: 'Open Optimizer',
+      title: t.getPriceQuote,
+      subtitle: t.aiPoweredPricing,
+      label: t.openOptimizer,
       icon: Zap,
       color: '#EBFF57',
       path: '/pricing/optimizer',
     },
     {
-      title: 'Upload Data',
-      subtitle: 'Add new CSV files to analyze',
-      label: 'Manage Files',
+      title: t.uploadData,
+      subtitle: t.addNewCSV,
+      label: t.manageFiles,
       icon: Database,
       color: 'rgb(59, 130, 246)', // blue-500
       path: '/data-sources',
     },
     {
-      title: 'View Analytics',
-      subtitle: 'Deep dive into trends & insights',
-      label: 'Explore Charts',
+      title: t.viewAnalytics,
+      subtitle: t.deepDive,
+      label: t.exploreCharts,
       icon: BarChart3,
       color: 'rgb(168, 85, 247)', // purple-500
       path: '/analytics',
     },
     {
-      title: 'Ask AI',
-      subtitle: 'Get instant answers & advice',
-      label: 'Open Assistant',
+      title: t.askAI,
+      subtitle: t.instantAnswers,
+      label: t.openAssistant,
       icon: Activity,
       color: 'rgb(34, 197, 94)', // green-500
       path: '/tools/assistant',
@@ -66,7 +102,7 @@ export const QuickActionCards = () => {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm text-gray-400">Quick Action</p>
+                  <p className="text-sm text-gray-400">{t.quickAction}</p>
                   <h3 className="mt-1 text-lg font-semibold text-gray-100">{action.title}</h3>
                   <p className="mt-2 text-sm text-gray-400">{action.subtitle}</p>
                 </div>

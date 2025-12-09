@@ -14,12 +14,37 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import type { RevenueDataPoint, OccupancyByDayPoint, PriceTimeSeriesPoint } from './types'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    revenuePerformance: 'Revenue Performance',
+    monthlyRevenue: 'Monthly revenue (last 6 months)',
+    weeklyOccupancy: 'Weekly Occupancy',
+    avgOccupancyByDay: 'Average occupancy by day',
+    priceTrend: 'Price Trend',
+    lastDays: 'Last {days} days',
+    avg: 'Avg',
+  },
+  fr: {
+    revenuePerformance: 'Performance des Revenus',
+    monthlyRevenue: 'Revenus mensuels (6 derniers mois)',
+    weeklyOccupancy: 'Occupation Hebdomadaire',
+    avgOccupancyByDay: 'Occupation moyenne par jour',
+    priceTrend: 'Tendance des Prix',
+    lastDays: '{days} derniers jours',
+    avg: 'Moy',
+  },
+}
 
 interface RevenueChartProps {
   data: RevenueDataPoint[]
 }
 
 export const RevenueChart = ({ data }: RevenueChartProps) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   if (data.length === 0) return null
 
   return (
@@ -27,8 +52,8 @@ export const RevenueChart = ({ data }: RevenueChartProps) => {
       <Card.Header>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-text">Revenue Performance</h2>
-            <p className="mt-1 text-sm text-muted">Monthly revenue (last 6 months)</p>
+            <h2 className="text-xl font-semibold text-text">{t.revenuePerformance}</h2>
+            <p className="mt-1 text-sm text-muted">{t.monthlyRevenue}</p>
           </div>
         </div>
       </Card.Header>
@@ -71,6 +96,9 @@ interface OccupancyChartProps {
 }
 
 export const OccupancyChart = ({ data }: OccupancyChartProps) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   if (data.length === 0) return null
 
   return (
@@ -78,8 +106,8 @@ export const OccupancyChart = ({ data }: OccupancyChartProps) => {
       <Card.Header>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-text">Weekly Occupancy</h2>
-            <p className="mt-1 text-sm text-muted">Average occupancy by day</p>
+            <h2 className="text-xl font-semibold text-text">{t.weeklyOccupancy}</h2>
+            <p className="mt-1 text-sm text-muted">{t.avgOccupancyByDay}</p>
           </div>
         </div>
       </Card.Header>
@@ -111,6 +139,9 @@ interface PriceTrendChartProps {
 }
 
 export const PriceTrendChart = ({ data, avgPrice }: PriceTrendChartProps) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   if (data.length === 0) return null
 
   return (
@@ -118,10 +149,10 @@ export const PriceTrendChart = ({ data, avgPrice }: PriceTrendChartProps) => {
       <Card.Header>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-text">Price Trend</h2>
-            <p className="mt-1 text-sm text-muted">Last {data.length} days</p>
+            <h2 className="text-xl font-semibold text-text">{t.priceTrend}</h2>
+            <p className="mt-1 text-sm text-muted">{t.lastDays.replace('{days}', String(data.length))}</p>
           </div>
-          <Badge variant="default">€{avgPrice} Avg</Badge>
+          <Badge variant="default">€{avgPrice} {t.avg}</Badge>
         </div>
       </Card.Header>
       <Card.Body>

@@ -3,6 +3,24 @@ import { CheckCircle2, ArrowRight, Sparkles } from 'lucide-react'
 import { Card, Button, Table } from '../ui'
 import { UploadedFile, ENRICHED_COLUMNS } from './types'
 import clsx from 'clsx'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    dataPreview: 'Data Preview',
+    firstRows: 'First 5 rows',
+    enrichedHighlighted: 'Enriched columns highlighted in green',
+    dataLooksGood: 'Data looks good!',
+    continueEnrichment: 'Continue to Enrichment',
+  },
+  fr: {
+    dataPreview: 'Aperçu des Données',
+    firstRows: '5 premières lignes',
+    enrichedHighlighted: 'Colonnes enrichies en vert',
+    dataLooksGood: 'Les données sont bonnes !',
+    continueEnrichment: 'Continuer vers l\'Enrichissement',
+  },
+}
 
 interface DataPreviewProps {
   files: UploadedFile[]
@@ -15,6 +33,9 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
   uploadedFilesFromDB,
   onContinue,
 }) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   const fileWithPreview = files.find(f => f.preview)
   if (!fileWithPreview?.preview?.[0]) return null
 
@@ -28,11 +49,11 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
   return (
     <Card variant="default">
       <Card.Header>
-        <h2 className="text-xl font-semibold text-text">Data Preview</h2>
+        <h2 className="text-xl font-semibold text-text">{t.dataPreview}</h2>
         <p className="mt-1 text-sm text-muted">
-          First 5 rows
+          {t.firstRows}
           {enrichmentStatus === 'completed' && (
-            <span className="ml-2 text-success">• Enriched columns highlighted in green</span>
+            <span className="ml-2 text-success">• {t.enrichedHighlighted}</span>
           )}
         </p>
       </Card.Header>
@@ -110,10 +131,10 @@ export const DataPreview: React.FC<DataPreviewProps> = ({
         <div className="flex w-full items-center justify-between">
           <p className="text-sm text-success">
             <CheckCircle2 className="mr-1 inline h-4 w-4" />
-            Data looks good!
+            {t.dataLooksGood}
           </p>
           <Button variant="primary" onClick={onContinue}>
-            Continue to Enrichment
+            {t.continueEnrichment}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>

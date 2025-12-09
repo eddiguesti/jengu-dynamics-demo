@@ -2,6 +2,20 @@ import React, { useRef } from 'react'
 import { Upload } from 'lucide-react'
 import { Card, Button } from '../ui'
 import clsx from 'clsx'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    dropFiles: 'Drop your files here, or click to browse',
+    supportedFormats: 'Supported formats: CSV, Excel (.xlsx, .xls)',
+    selectFiles: 'Select Files',
+  },
+  fr: {
+    dropFiles: 'Déposez vos fichiers ici, ou cliquez pour parcourir',
+    supportedFormats: 'Formats acceptés : CSV, Excel (.xlsx, .xls)',
+    selectFiles: 'Sélectionner des Fichiers',
+  },
+}
 
 interface UploadZoneProps {
   isDragging: boolean
@@ -19,6 +33,8 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
   onFileSelect,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { language } = useLanguageStore()
+  const t = translations[language]
 
   return (
     <Card variant="elevated" data-tour="upload-zone">
@@ -49,12 +65,12 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
           </div>
           <div className="text-center">
             <h3 className="mb-1 text-lg font-semibold text-text">
-              Drop your files here, or click to browse
+              {t.dropFiles}
             </h3>
-            <p className="text-sm text-muted">Supported formats: CSV, Excel (.xlsx, .xls)</p>
+            <p className="text-sm text-muted">{t.supportedFormats}</p>
           </div>
           <Button variant="primary" size="lg">
-            Select Files
+            {t.selectFiles}
           </Button>
         </div>
       </div>

@@ -2,6 +2,18 @@ import React from 'react'
 import { Database, Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react'
 import clsx from 'clsx'
 import { Step } from './types'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    upload: '1. Upload',
+    enrich: '2. Enrich',
+  },
+  fr: {
+    upload: '1. Importer',
+    enrich: '2. Enrichir',
+  },
+}
 
 interface StepIndicatorProps {
   currentStep: Step
@@ -16,6 +28,9 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   hasSuccessfulUpload,
   allEnrichmentComplete,
 }) => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
+
   return (
     <div className="mt-6 flex items-center gap-4">
       <button
@@ -28,7 +43,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
         )}
       >
         <Database className="h-4 w-4" />
-        <span className="font-medium">1. Upload</span>
+        <span className="font-medium">{t.upload}</span>
         {hasSuccessfulUpload && <CheckCircle2 className="h-4 w-4 text-success" />}
       </button>
 
@@ -47,7 +62,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
         )}
       >
         <Sparkles className="h-4 w-4" />
-        <span className="font-medium">2. Enrich</span>
+        <span className="font-medium">{t.enrich}</span>
         {allEnrichmentComplete && <CheckCircle2 className="h-4 w-4 text-success" />}
       </button>
     </div>
