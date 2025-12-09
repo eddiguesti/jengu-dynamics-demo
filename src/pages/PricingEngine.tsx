@@ -4,6 +4,7 @@ import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDataStore } from '../stores'
+import { useLanguageStore } from '../stores/useLanguageStore'
 import { pageVariants, spring } from '@/lib/motion'
 import { getAdvancedPricingRecommendations } from '../lib/api/services/advancedPricing'
 import { showPremiumModal } from '../components/ui/PremiumModal'
@@ -15,6 +16,51 @@ import {
   RotateCcw,
   Database,
 } from 'lucide-react'
+
+const translations = {
+  en: {
+    title: 'Smart Pricing Engine',
+    subtitle: 'AI-powered demand forecasting and dynamic price optimization',
+    reset: 'Reset',
+    loading: 'Loading...',
+    optimizing: 'Optimizing...',
+    runOptimization: 'Run Optimization',
+    selectProperty: 'Select Property',
+    selectPropertyOption: '-- Select a property --',
+    records: 'records',
+    loadingPricing: 'Loading pricing data...',
+    pricingError: 'Pricing Error',
+    dismiss: 'Dismiss',
+    successTitle: 'Pricing strategy applied successfully!',
+    successDesc: 'Your optimized prices are now active for the next {days} days.',
+    noDataTitle: 'No Historical Data Available',
+    noDataDesc: 'Upload your historical booking data (CSV) to get AI-powered pricing recommendations based on your actual property performance, seasonality, and market conditions.',
+    uploadHistorical: 'Upload Historical Data',
+    optimizationAlert: 'Optimization Alert',
+    optimizationAlertDesc: 'The current parameters result in lower revenue. Consider adjusting your strategy to be more aggressive or review your occupancy targets.',
+  },
+  fr: {
+    title: 'Moteur de Tarification Intelligent',
+    subtitle: 'Prévision de la demande et optimisation tarifaire par IA',
+    reset: 'Réinitialiser',
+    loading: 'Chargement...',
+    optimizing: 'Optimisation...',
+    runOptimization: 'Lancer l\'Optimisation',
+    selectProperty: 'Sélectionner une Propriété',
+    selectPropertyOption: '-- Sélectionnez une propriété --',
+    records: 'enregistrements',
+    loadingPricing: 'Chargement des tarifs...',
+    pricingError: 'Erreur de Tarification',
+    dismiss: 'Fermer',
+    successTitle: 'Stratégie tarifaire appliquée avec succès !',
+    successDesc: 'Vos prix optimisés sont actifs pour les {days} prochains jours.',
+    noDataTitle: 'Aucune Donnée Historique Disponible',
+    noDataDesc: 'Importez vos données de réservation historiques (CSV) pour obtenir des recommandations tarifaires IA basées sur vos performances réelles.',
+    uploadHistorical: 'Importer des Données Historiques',
+    optimizationAlert: 'Alerte d\'Optimisation',
+    optimizationAlertDesc: 'Les paramètres actuels entraînent un revenu inférieur. Envisagez d\'ajuster votre stratégie ou de revoir vos objectifs d\'occupation.',
+  },
+}
 
 // Import extracted components
 import {
@@ -37,6 +83,8 @@ import {
 export const PricingEngine: React.FC = () => {
   const navigate = useNavigate()
   const { uploadedFiles } = useDataStore()
+  const { language } = useLanguageStore()
+  const t = translations[language]
   const hasData = uploadedFiles.length > 0
 
   // Property selection
@@ -280,14 +328,14 @@ export const PricingEngine: React.FC = () => {
         <div>
           <h1 className="mb-2 flex items-center gap-3 text-3xl font-bold text-text">
             <Sparkles className="h-8 w-8 text-primary" />
-            Smart Pricing Engine
+            {t.title}
           </h1>
-          <p className="text-muted">AI-powered demand forecasting and dynamic price optimization</p>
+          <p className="text-muted">{t.subtitle}</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="md" onClick={handleReset}>
             <RotateCcw className="mr-2 h-4 w-4" />
-            Reset
+            {t.reset}
           </Button>
           <Button
             variant="primary"
@@ -299,12 +347,12 @@ export const PricingEngine: React.FC = () => {
             {isOptimizing || isLoading ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />
-                {isLoading ? 'Loading...' : 'Optimizing...'}
+                {isLoading ? t.loading : t.optimizing}
               </>
             ) : (
               <>
                 <PlayCircle className="h-4 w-4" />
-                Run Optimization
+                {t.runOptimization}
               </>
             )}
           </Button>
@@ -317,16 +365,16 @@ export const PricingEngine: React.FC = () => {
           <Card.Body className="flex items-center gap-4">
             <Database className="h-5 w-5 text-primary" />
             <div className="flex-1">
-              <label className="mb-2 block text-sm font-medium text-text">Select Property</label>
+              <label className="mb-2 block text-sm font-medium text-text">{t.selectProperty}</label>
               <select
                 value={selectedPropertyId}
                 onChange={e => setSelectedPropertyId(e.target.value)}
                 className="w-full rounded-lg border border-border bg-background px-4 py-2 text-text focus:border-primary focus:outline-none"
               >
-                <option value="">-- Select a property --</option>
+                <option value="">{t.selectPropertyOption}</option>
                 {uploadedFiles.map(file => (
                   <option key={file.id} value={file.id}>
-                    {file.name} ({file.rows} records)
+                    {file.name} ({file.rows} {t.records})
                   </option>
                 ))}
               </select>
@@ -334,7 +382,7 @@ export const PricingEngine: React.FC = () => {
             {isLoading && (
               <div className="flex items-center gap-2 text-sm text-muted">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                Loading pricing data...
+                {t.loadingPricing}
               </div>
             )}
           </Card.Body>
@@ -353,11 +401,11 @@ export const PricingEngine: React.FC = () => {
           >
             <AlertTriangle className="h-5 w-5 text-error" />
             <div className="flex-1">
-              <p className="font-semibold text-error">Pricing Error</p>
+              <p className="font-semibold text-error">{t.pricingError}</p>
               <p className="mt-1 text-sm text-muted">{error}</p>
             </div>
             <Button variant="outline" size="sm" onClick={() => setError(null)}>
-              Dismiss
+              {t.dismiss}
             </Button>
           </motion.div>
         )}
@@ -375,9 +423,9 @@ export const PricingEngine: React.FC = () => {
           >
             <CheckCircle className="h-5 w-5 text-success" />
             <div>
-              <p className="font-semibold text-success">Pricing strategy applied successfully!</p>
+              <p className="font-semibold text-success">{t.successTitle}</p>
               <p className="mt-1 text-sm text-muted">
-                Your optimized prices are now active for the next {forecastHorizon} days.
+                {t.successDesc.replace('{days}', String(forecastHorizon))}
               </p>
             </div>
           </motion.div>
@@ -429,14 +477,13 @@ export const PricingEngine: React.FC = () => {
           <Card.Body className="flex items-start gap-4">
             <Database className="mt-1 h-6 w-6 flex-shrink-0 text-blue-500" />
             <div>
-              <h3 className="mb-2 text-lg font-semibold text-text">No Historical Data Available</h3>
+              <h3 className="mb-2 text-lg font-semibold text-text">{t.noDataTitle}</h3>
               <p className="mb-3 text-muted">
-                Upload your historical booking data (CSV) to get AI-powered pricing recommendations
-                based on your actual property performance, seasonality, and market conditions.
+                {t.noDataDesc}
               </p>
               <Button variant="primary" size="sm" onClick={() => navigate('/data')}>
                 <Database className="mr-2 h-4 w-4" />
-                Upload Historical Data
+                {t.uploadHistorical}
               </Button>
             </div>
           </Card.Body>
@@ -449,12 +496,9 @@ export const PricingEngine: React.FC = () => {
           <Card.Body className="flex items-start gap-4">
             <AlertTriangle className="mt-1 h-6 w-6 flex-shrink-0 text-orange-500" />
             <div>
-              <h3 className="mb-2 text-lg font-semibold text-text">Optimization Alert</h3>
+              <h3 className="mb-2 text-lg font-semibold text-text">{t.optimizationAlert}</h3>
               <p className="text-muted">
-                The current parameters result in lower revenue. Consider adjusting your strategy to
-                be more aggressive or review your occupancy targets. The{' '}
-                {STRATEGIES.balanced.name.toLowerCase()} strategy typically provides the best
-                balance.
+                {t.optimizationAlertDesc}
               </p>
             </div>
           </Card.Body>

@@ -4,11 +4,87 @@ import { motion } from 'framer-motion'
 import { Save, Building2, MapPin, DollarSign, Clock, CheckCircle2, Loader2 } from 'lucide-react'
 import { Card, Button, Input, Select } from '../components/ui'
 import { useBusinessStore } from '../stores'
+import { useLanguageStore } from '../stores/useLanguageStore'
 import { useBusinessProfile, useUpdateBusinessProfile } from '../hooks/queries/useBusinessSettings'
 import { showPremiumModal } from '../components/ui/PremiumModal'
 import { DEMO_BUSINESS } from '../lib/mockData'
 
+const translations = {
+  en: {
+    title: 'Settings',
+    subtitle: 'Manage your business profile and preferences',
+    loadingSettings: 'Loading your settings...',
+    savedSuccess: 'Settings saved successfully to database!',
+    businessInfo: 'Business Information',
+    businessInfoDesc: 'Basic details about your property',
+    businessName: 'Business Name',
+    businessNamePlaceholder: 'Enter your business name',
+    propertyType: 'Property Type',
+    location: 'Location',
+    locationDesc: 'Used for weather data and competitor analysis',
+    autoFilling: 'Auto-filling coordinates...',
+    locationTip: 'Enter your city and country, and we\'ll automatically find the coordinates for you!',
+    city: 'City',
+    country: 'Country',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
+    autoFilled: 'Auto-filled from city/country',
+    searching: 'Searching...',
+    locationCoords: 'Location coordinates auto-filled:',
+    regionalSettings: 'Regional Settings',
+    regionalDesc: 'Currency and timezone preferences',
+    currency: 'Currency',
+    currencyHelper: 'All pricing will be displayed in this currency',
+    timezone: 'Timezone',
+    timezoneHelper: 'Used for date/time displays and scheduling',
+    integrations: 'PMS & CRM Integrations',
+    integrationsDesc: 'Connect your systems for automatic data sync',
+    integrationsTip: 'Connect your existing systems and we\'ll sync your booking data automatically - no manual uploads needed!',
+    connect: 'Connect',
+    cancel: 'Cancel',
+    saveSettings: 'Save Settings',
+    saving: 'Saving...',
+  },
+  fr: {
+    title: 'Paramètres',
+    subtitle: 'Gérez votre profil d\'entreprise et vos préférences',
+    loadingSettings: 'Chargement de vos paramètres...',
+    savedSuccess: 'Paramètres enregistrés avec succès !',
+    businessInfo: 'Informations de l\'Entreprise',
+    businessInfoDesc: 'Détails de base sur votre propriété',
+    businessName: 'Nom de l\'Entreprise',
+    businessNamePlaceholder: 'Entrez le nom de votre entreprise',
+    propertyType: 'Type de Propriété',
+    location: 'Localisation',
+    locationDesc: 'Utilisé pour les données météo et l\'analyse concurrentielle',
+    autoFilling: 'Remplissage automatique des coordonnées...',
+    locationTip: 'Entrez votre ville et pays, et nous trouverons automatiquement les coordonnées !',
+    city: 'Ville',
+    country: 'Pays',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
+    autoFilled: 'Rempli automatiquement depuis ville/pays',
+    searching: 'Recherche...',
+    locationCoords: 'Coordonnées remplies automatiquement :',
+    regionalSettings: 'Paramètres Régionaux',
+    regionalDesc: 'Préférences de devise et fuseau horaire',
+    currency: 'Devise',
+    currencyHelper: 'Tous les prix seront affichés dans cette devise',
+    timezone: 'Fuseau Horaire',
+    timezoneHelper: 'Utilisé pour l\'affichage des dates/heures',
+    integrations: 'Intégrations PMS & CRM',
+    integrationsDesc: 'Connectez vos systèmes pour la synchronisation automatique',
+    integrationsTip: 'Connectez vos systèmes existants et nous synchroniserons vos données de réservation automatiquement !',
+    connect: 'Connecter',
+    cancel: 'Annuler',
+    saveSettings: 'Enregistrer',
+    saving: 'Enregistrement...',
+  },
+}
+
 export const Settings = () => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
   const { profile } = useBusinessStore()
   const [isGeocoding, setIsGeocoding] = useState(false)
   const [geocodeError, setGeocodeError] = useState<string | null>(null)
@@ -102,8 +178,8 @@ export const Settings = () => {
     >
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold text-text">Settings</h1>
-        <p className="mt-2 text-muted">Manage your business profile and preferences</p>
+        <h1 className="text-4xl font-bold text-text">{t.title}</h1>
+        <p className="mt-2 text-muted">{t.subtitle}</p>
       </div>
 
       {/* Loading State */}
@@ -112,7 +188,7 @@ export const Settings = () => {
           <Card variant="elevated" className="border-primary/20 bg-primary/5">
             <div className="flex items-center gap-3">
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
-              <p className="text-sm font-medium text-primary">Loading your settings...</p>
+              <p className="text-sm font-medium text-primary">{t.loadingSettings}</p>
             </div>
           </Card>
         </motion.div>
@@ -125,7 +201,7 @@ export const Settings = () => {
             <div className="flex items-center gap-3">
               <CheckCircle2 className="h-5 w-5 text-success" />
               <p className="text-sm font-medium text-success">
-                Settings saved successfully to database!
+                {t.savedSuccess}
               </p>
             </div>
           </Card>
@@ -155,8 +231,8 @@ export const Settings = () => {
               <Building2 className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-text">Business Information</h2>
-              <p className="mt-1 text-sm text-muted">Basic details about your property</p>
+              <h2 className="text-xl font-semibold text-text">{t.businessInfo}</h2>
+              <p className="mt-1 text-sm text-muted">{t.businessInfoDesc}</p>
             </div>
           </div>
         </Card.Header>
@@ -205,16 +281,16 @@ export const Settings = () => {
                 <MapPin className="h-5 w-5 text-success" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-text">Location</h2>
+                <h2 className="text-xl font-semibold text-text">{t.location}</h2>
                 <p className="mt-1 text-sm text-muted">
-                  Used for weather data and competitor analysis
+                  {t.locationDesc}
                 </p>
               </div>
             </div>
             {isGeocoding && (
               <div className="flex items-center gap-2 text-sm text-primary">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Auto-filling coordinates...</span>
+                <span>{t.autoFilling}</span>
               </div>
             )}
           </div>
@@ -304,8 +380,8 @@ export const Settings = () => {
               <DollarSign className="h-5 w-5 text-warning" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-text">Regional Settings</h2>
-              <p className="mt-1 text-sm text-muted">Currency and timezone preferences</p>
+              <h2 className="text-xl font-semibold text-text">{t.regionalSettings}</h2>
+              <p className="mt-1 text-sm text-muted">{t.regionalDesc}</p>
             </div>
           </div>
         </Card.Header>
@@ -367,8 +443,8 @@ export const Settings = () => {
               <Clock className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-text">PMS & CRM Integrations</h2>
-              <p className="mt-1 text-sm text-muted">Connect your systems for automatic data sync</p>
+              <h2 className="text-xl font-semibold text-text">{t.integrations}</h2>
+              <p className="mt-1 text-sm text-muted">{t.integrationsDesc}</p>
             </div>
           </div>
         </Card.Header>
@@ -440,7 +516,7 @@ export const Settings = () => {
       {/* Save Button */}
       <div className="flex items-center justify-end gap-3">
         <Button variant="secondary" size="lg">
-          Cancel
+          {t.cancel}
         </Button>
         <Button
           variant="primary"
@@ -449,11 +525,11 @@ export const Settings = () => {
           loading={updateSettingsMutation.isPending}
         >
           {updateSettingsMutation.isPending ? (
-            'Saving...'
+            t.saving
           ) : (
             <>
               <Save className="mr-2 h-5 w-5" />
-              Save Settings
+              {t.saveSettings}
             </>
           )}
         </Button>

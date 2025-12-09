@@ -9,11 +9,73 @@ import { DemandPatternsCard } from '@/components/analytics/DemandPatternsCard'
 import { WeatherImpactCard } from '@/components/analytics/WeatherImpactCard'
 import { useAdvancedAnalytics } from '@/hooks/queries/useAnalytics'
 import { useUploadedFiles } from '@/hooks/queries/useFileData'
+import { useLanguageStore } from '@/stores/useLanguageStore'
+
+const translations = {
+  en: {
+    title: 'Analytics',
+    subtitle: 'Comprehensive insights and data-driven recommendations for optimal pricing',
+    selectProperty: 'Select a property...',
+    refresh: 'Refresh',
+    failedLoad: 'Failed to load analytics',
+    tryAgain: 'Try Again',
+    noPropertyTitle: 'No Property Selected',
+    noPropertyDesc: 'Upload a pricing dataset to see comprehensive analytics and get AI-powered recommendations for optimizing your revenue.',
+    uploadData: 'Upload Data',
+    totalRevenue: 'Total Revenue (Est.)',
+    last30Days: 'Last 30 days estimate',
+    avgOccupancy: 'Avg Occupancy',
+    basedOnHistorical: 'Based on historical data',
+    avgPrice: 'Avg Price',
+    perNight: 'Per night average',
+    dataQuality: 'Data Quality',
+    daysEnriched: '{enriched} of {total} days enriched',
+    lowDataQuality: 'Low Data Quality',
+    lowDataQualityDesc: 'Only {percent}% of your data has been enriched with weather and holiday information. Run enrichment to get more accurate analytics and pricing recommendations.',
+    enrichData: 'Enrich Data',
+    analyzing: 'Analyzing',
+    daysHistory: 'days of historical data',
+    lastUpdated: 'Last updated',
+    insufficientData: 'Insufficient Data',
+    insufficientDataDesc: 'We need at least 14 days of historical data to generate accurate analytics. Currently, you have {days} days of data.',
+    insufficientDataTip: 'Upload more historical pricing data to unlock comprehensive analytics and ML-powered recommendations.',
+  },
+  fr: {
+    title: 'Analyses',
+    subtitle: 'Analyses complètes et recommandations pour une tarification optimale',
+    selectProperty: 'Sélectionnez une propriété...',
+    refresh: 'Actualiser',
+    failedLoad: 'Échec du chargement des analyses',
+    tryAgain: 'Réessayer',
+    noPropertyTitle: 'Aucune Propriété Sélectionnée',
+    noPropertyDesc: 'Importez un jeu de données tarifaires pour voir des analyses complètes et obtenir des recommandations IA.',
+    uploadData: 'Importer des Données',
+    totalRevenue: 'Revenu Total (Est.)',
+    last30Days: 'Estimation 30 derniers jours',
+    avgOccupancy: 'Occupation Moy.',
+    basedOnHistorical: 'Basé sur les données historiques',
+    avgPrice: 'Prix Moyen',
+    perNight: 'Moyenne par nuit',
+    dataQuality: 'Qualité des Données',
+    daysEnriched: '{enriched} sur {total} jours enrichis',
+    lowDataQuality: 'Qualité des Données Faible',
+    lowDataQualityDesc: 'Seulement {percent}% de vos données ont été enrichies avec les informations météo et jours fériés. Lancez l\'enrichissement pour des analyses plus précises.',
+    enrichData: 'Enrichir les Données',
+    analyzing: 'Analyse de',
+    daysHistory: 'jours de données historiques',
+    lastUpdated: 'Dernière mise à jour',
+    insufficientData: 'Données Insuffisantes',
+    insufficientDataDesc: 'Nous avons besoin d\'au moins 14 jours de données historiques pour générer des analyses précises. Actuellement, vous avez {days} jours de données.',
+    insufficientDataTip: 'Importez plus de données historiques pour débloquer des analyses complètes et des recommandations IA.',
+  },
+}
 
 /**
  * Analytics Page - Comprehensive pricing analytics dashboard
  */
 export const Analytics = () => {
+  const { language } = useLanguageStore()
+  const t = translations[language]
   const { data: files } = useUploadedFiles()
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('')
 
@@ -57,9 +119,9 @@ export const Analytics = () => {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-text mb-2 text-3xl font-bold">Analytics</h1>
+          <h1 className="text-text mb-2 text-3xl font-bold">{t.title}</h1>
           <p className="text-muted">
-            Comprehensive insights and data-driven recommendations for optimal pricing
+            {t.subtitle}
           </p>
         </div>
 
@@ -71,7 +133,7 @@ export const Analytics = () => {
               onChange={(e) => setSelectedPropertyId(e.target.value)}
               className="w-64"
             >
-              <option value="">Select a property...</option>
+              <option value="">{t.selectProperty}</option>
               {files.map((file) => (
                 <option key={file.id} value={file.id}>
                   {file.name}
@@ -89,7 +151,7 @@ export const Analytics = () => {
               disabled={isLoading}
             >
               <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              {t.refresh}
             </Button>
           )}
         </div>
@@ -117,13 +179,13 @@ export const Analytics = () => {
           <Card.Body className="flex items-center gap-4 p-6">
             <AlertCircle className="text-error h-6 w-6 flex-shrink-0" />
             <div className="flex-1">
-              <p className="text-error font-semibold">Failed to load analytics</p>
+              <p className="text-error font-semibold">{t.failedLoad}</p>
               <p className="text-error/80 mt-1 text-sm">
                 {error instanceof Error ? error.message : 'An unexpected error occurred'}
               </p>
             </div>
             <Button variant="outline" size="sm" onClick={() => refetch()}>
-              Try Again
+              {t.tryAgain}
             </Button>
           </Card.Body>
         </Card>
@@ -134,13 +196,12 @@ export const Analytics = () => {
         <Card className="p-12 text-center">
           <div className="mx-auto max-w-md">
             <BarChart3 className="text-primary mx-auto mb-4 h-16 w-16" />
-            <h2 className="text-text mb-2 text-2xl font-bold">No Property Selected</h2>
+            <h2 className="text-text mb-2 text-2xl font-bold">{t.noPropertyTitle}</h2>
             <p className="text-muted mb-6">
-              Upload a pricing dataset to see comprehensive analytics and get AI-powered
-              recommendations for optimizing your revenue.
+              {t.noPropertyDesc}
             </p>
             <Button variant="primary" onClick={() => (window.location.href = '/data')}>
-              Upload Data
+              {t.uploadData}
             </Button>
           </div>
         </Card>
@@ -154,11 +215,11 @@ export const Analytics = () => {
             <Card className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-muted mb-1 text-sm">Total Revenue (Est.)</p>
+                  <p className="text-muted mb-1 text-sm">{t.totalRevenue}</p>
                   <p className="text-text text-3xl font-bold">
                     €{summaryMetrics.totalRevenue.toLocaleString()}
                   </p>
-                  <p className="text-success mt-1 text-xs">Last 30 days estimate</p>
+                  <p className="text-success mt-1 text-xs">{t.last30Days}</p>
                 </div>
                 <DollarSign className="text-primary h-8 w-8" />
               </div>
@@ -167,9 +228,9 @@ export const Analytics = () => {
             <Card className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-muted mb-1 text-sm">Avg Occupancy</p>
+                  <p className="text-muted mb-1 text-sm">{t.avgOccupancy}</p>
                   <p className="text-text text-3xl font-bold">{summaryMetrics.avgOccupancy}%</p>
-                  <p className="text-muted mt-1 text-xs">Based on historical data</p>
+                  <p className="text-muted mt-1 text-xs">{t.basedOnHistorical}</p>
                 </div>
                 <Users className="text-primary h-8 w-8" />
               </div>
@@ -178,9 +239,9 @@ export const Analytics = () => {
             <Card className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-muted mb-1 text-sm">Avg Price</p>
+                  <p className="text-muted mb-1 text-sm">{t.avgPrice}</p>
                   <p className="text-text text-3xl font-bold">€{summaryMetrics.avgPrice}</p>
-                  <p className="text-muted mt-1 text-xs">Per night average</p>
+                  <p className="text-muted mt-1 text-xs">{t.perNight}</p>
                 </div>
                 <TrendingUp className="text-primary h-8 w-8" />
               </div>
@@ -189,12 +250,12 @@ export const Analytics = () => {
             <Card className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-muted mb-1 text-sm">Data Quality</p>
+                  <p className="text-muted mb-1 text-sm">{t.dataQuality}</p>
                   <p className="text-text text-3xl font-bold">
                     {Math.round((analyticsData.dataQuality.enrichmentRate || 0) * 100)}%
                   </p>
                   <p className="text-muted mt-1 text-xs">
-                    {analyticsData.dataQuality.enrichedDays} of {analyticsData.dataQuality.totalDays} days enriched
+                    {t.daysEnriched.replace('{enriched}', String(analyticsData.dataQuality.enrichedDays)).replace('{total}', String(analyticsData.dataQuality.totalDays))}
                   </p>
                 </div>
                 <BarChart3 className="text-primary h-8 w-8" />
