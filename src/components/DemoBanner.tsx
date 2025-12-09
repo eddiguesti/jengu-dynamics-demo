@@ -35,7 +35,7 @@ export function DemoBanner() {
           </span>
           <span className="mx-2 opacity-75">|</span>
           <a
-            href="https://jengu.io"
+            href="https://www.jengu.ai/book/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:no-underline font-semibold"

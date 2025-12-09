@@ -113,7 +113,7 @@ export const PremiumModal = () => {
                     onClick={() => {
                       closeModal()
                       // In real app, this would navigate to pricing page
-                      window.open('https://jengu.io/pricing', '_blank')
+                      window.open('https://www.jengu.ai/book/', '_blank')
                     }}
                   >
                     <Crown className="mr-2 h-4 w-4" />

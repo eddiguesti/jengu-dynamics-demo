@@ -409,7 +409,7 @@ export const SidebarV2 = () => {
       {/* CTA - Book a Call */}
       <div className="border-t border-border/40 p-3">
         <a
-          href="https://calendly.com/jengu/demo"
+          href="https://www.jengu.ai/book/"
           target="_blank"
           rel="noopener noreferrer"
           className="group relative mb-3 block overflow-hidden rounded-xl bg-gradient-to-r from-red-500 to-red-600 p-4 shadow-lg shadow-red-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-red-500/30"

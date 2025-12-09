@@ -42,8 +42,8 @@ interface TourStep {
   }
 }
 
-// Calendly booking link - replace with your actual link
-const BOOKING_URL = 'https://calendly.com/jengu/demo'
+// Booking link
+const BOOKING_URL = 'https://www.jengu.ai/book/'
 
 // UI translations
 const UI_TRANSLATIONS = {
